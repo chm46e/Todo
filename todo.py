@@ -1,5 +1,6 @@
 import os.path
 import sys
+import subprocess as sp
 from termcolor import colored
 
 # Ideas;
@@ -17,6 +18,7 @@ LAUNCHER: str = os.path.join(USERBIN, launcher)
 BASEFOLDER: str = os.path.expanduser("~/.config/Wolfy-todo/")
 BASENOTES: str = os.path.join(BASEFOLDER, noteFile)
 BASEGROUPS: str = os.path.join(BASEFOLDER, groupFile)
+HOMEFOLDER: str = sp.getoutput("echo $HOME")
 
 alphabet = "abcdefghijklmonpqrstuvwxyz"
 
@@ -25,49 +27,53 @@ access_rights = 0o755
 
 # Create target Directory and files if they don't exist
 def setup():
+    red_prompt = colored(">>", "red")
+    green_prompt = colored(">>", "green")
+    created = colored(" created!", "magenta")
+    exists = colored(" exists!", "green")
+
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
         os.makedirs(BASEFOLDER, access_rights)
-        print(">> Directory ", BASEFOLDER, " created!")
+        print(red_prompt, " Directory ", BASEFOLDER.replace(HOMEFOLDER, "~"), " "*7, created)
     else:
-        print(">> Directory ", BASEFOLDER, " already exists!")
+        print(green_prompt," Directory ", BASEFOLDER.replace(HOMEFOLDER, "~"), " already", exists)
 
     # Test if note file exist and create it
     if not os.path.isfile(BASENOTES):
         with open(BASENOTES, "w") as file:
             file.write("First_note!")
-        print(">> Groups file ", BASENOTES, " created!")
+        print(red_prompt," Groups file ", BASENOTES.replace(HOMEFOLDER, "~") + " ", created)
     else:
-        print(">> File ", BASENOTES, " already exists!")
+        print(green_prompt," File ", BASENOTES.replace(HOMEFOLDER, "~"), " already", exists)
 
     # Test if group file exist and create it
     if not os.path.isfile(BASEGROUPS):
         with open(BASEGROUPS, "w") as file:
             file.write("Welcome")
-        print(">> Notes file ", BASEGROUPS, " created!")
+        print(red_prompt," Notes file ", BASEGROUPS.replace(HOMEFOLDER, "~") + " ", created)
     else:
-        print(">> File ", BASEGROUPS, " already exists!")
+        print(green_prompt," File ", BASEGROUPS.replace(HOMEFOLDER, "~"), "already", exists)
 
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
             file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py")
         os.chmod(LAUNCHER, access_rights)
-        print(">> Launcher ", LAUNCHER, " created!")
+        print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
     else:
-        print(">> Launcher ", LAUNCHER, " already exists!")
+        print(green_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*11, " already", exists)
         
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
 
-
-    print("All set! Enjoy your note taking!")
-    print("Type '--help' for some tips!")
+    print(colored("-"*54, "blue"))
+    print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
+    print("Type " + colored("--help", "yellow") + " for some tips!")
     #help()
 
 # Minifunctions
-
 
 def readgroupfile():
     file = open(BASEGROUPS, "r")
@@ -81,6 +87,12 @@ def readnotefile():
     lines = file.readlines()
     file.close()
     return lines
+
+def output(cmd):
+    return sp.getoutput(cmd)
+
+def run(cmd):
+    return os.system(cmd)
 
 
 # Functions
