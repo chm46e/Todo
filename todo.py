@@ -9,11 +9,14 @@ from termcolor import colored
 args = sys.argv
 args_len = len(args) - 1
 
-notefile = "notes"
-groupfile = "groups"
+noteFile = "notes"
+groupFile = "groups"
+launcher = "todo"
+USERBIN: str = os.path.expanduser("~/bin")
+LAUNCHER: str = os.path.join(USERBIN, launcher)
 BASEFOLDER: str = os.path.expanduser("~/.config/Wolfy-todo/")
-BASENOTES: str = os.path.join(BASEFOLDER, notefile)
-BASEGROUPS: str = os.path.join(BASEFOLDER, groupfile)
+BASENOTES: str = os.path.join(BASEFOLDER, noteFile)
+BASEGROUPS: str = os.path.join(BASEFOLDER, groupFile)
 
 alphabet = "abcdefghijklmonpqrstuvwxyz"
 
@@ -32,7 +35,7 @@ def setup():
     # Test if note file exist and create it
     if not os.path.isfile(BASENOTES):
         with open(BASENOTES, "w") as file:
-            file.write("# Your notes go here!")
+            file.write("First_note!")
         print(">> Groups file ", BASENOTES, " created!")
     else:
         print(">> File ", BASENOTES, " already exists!")
@@ -40,13 +43,28 @@ def setup():
     # Test if group file exist and create it
     if not os.path.isfile(BASEGROUPS):
         with open(BASEGROUPS, "w") as file:
-            file.write("# Your groups go here!")
+            file.write("Welcome")
         print(">> Notes file ", BASEGROUPS, " created!")
     else:
-        print(">> File ", BASEGROUPS, " already exists")
+        print(">> File ", BASEGROUPS, " already exists!")
+
+    # Adding launcher
+    if not os.path.isfile(LAUNCHER):
+        with open(LAUNCHER, "w") as file:
+            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py")
+        os.chmod(LAUNCHER, access_rights)
+        print(">> Launcher ", LAUNCHER, " created!")
+    else:
+        print(">> Launcher ", LAUNCHER, " already exists!")
+        
+    # Copy script to config folder
+    os.system("cp todo.py $HOME/.config/Wolfy-todo")
+
+
+
     print("All set! Enjoy your note taking!")
-    print("Here are some tips!")
-    help()
+    print("Type '--help' for some tips!")
+    #help()
 
 # Minifunctions
 
@@ -89,7 +107,7 @@ def list():
         # Split's the line by the space delimiter and put's them into variables
         lines = readnotefile()
         line = lines[counter].replace("\n", "")
-        note, state, group = line.split(";")
+        note, state, group = line.split()
 
         # Change the color depending on the state
         if(state == "1"):
@@ -372,7 +390,7 @@ def help():
     print("Change the state of first group, third note to done(green):")
     print("  todo s a3 3")
     print("")
-    print("Made by: Mr.Wolfy")
+    print("Made by: Mr.Wolfy and Tux-Code")
 
 def main():
 
