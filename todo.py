@@ -58,7 +58,7 @@ def setup():
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
-            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py")
+            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py $*")
         os.chmod(LAUNCHER, access_rights)
         print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
     else:
@@ -66,7 +66,6 @@ def setup():
         
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
-
 
     print(colored("-"*54, "blue"))
     print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
