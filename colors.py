@@ -1,4 +1,4 @@
-class colors:
+class cs:
     quit='\033[00m'
     reset='\033[0m'
     bold='\033[01m'
@@ -24,3 +24,19 @@ class colors:
     lblue='\033[94m'
     pink='\033[95m'
     lcyan='\033[96m'
+
+#More used colors in functions
+def red(str):
+    return cs.red + str + cs.quit
+
+def green(str):
+    return cs.green + str + cs.quit
+
+def blue(str):
+    return cs.blue + str + cs.quit
+
+def magenta(str):
+    return cs.magenta + str + cs.quit
+
+def yellow(str):
+    return cs.orange + str + cs.quit

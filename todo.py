@@ -1,7 +1,7 @@
 import os.path
 import sys
 import subprocess as sp
-from colors import colors as cs
+from colors import *
 
 # Global variables
 args = sys.argv
@@ -24,10 +24,10 @@ access_rights = 0o755
 
 # Create target Directory and files if they don't exist
 def setup():
-    red_prompt = cs.red + ">>" + cs.quit
-    green_prompt = cs.green + ">>" + cs.quit
-    created = cs.purple + " created!" + cs.quit
-    exists = cs.green + " exists!" + cs.quit
+    red_prompt = red(">>")
+    green_prompt = green(">>")
+    created = magenta(" created!")
+    exists = green(" exists!")
 
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
@@ -65,9 +65,9 @@ def setup():
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
 
-    print(cs.blue + "-"*54 + cs.quit)
+    print(blue("-"*54))
     print(cs.bold + cs.magenta + "All set!" + cs.quit + " Enjoy your note taking!")
-    print("Type " + cs.yellow + "--help" + cs.quit + " for some tips!")
+    print("Type " + yellow("--help") + " for some tips!")
     #help()
 
 # Minifunctions
@@ -76,8 +76,8 @@ def readgroupfile():
     try:
         file = open(BASEGROUPS, "r")
     except:
-        print(cs.magenta + "Groupfile" + cs.quit + " missing:")
-        print(cs.green + "Running setup:" + cs.quit)
+        print(magenta("Groupfile") + " missing:")
+        print(green("Running setup:"))
         print(" ")
         setup()
         sys.exit()
@@ -90,8 +90,8 @@ def readnotefile():
     try:
         file = open(BASENOTES, "r")
     except:
-        print(cs.magenta + "Notefile" + cs.quit + " missing:")
-        print(cs.red + "Running setup:" + cs.quit)
+        print(magenta("Notefile") + " missing:")
+        print(red("Running setup:"))
         print(" ")
         setup()
         sys.exit()
@@ -159,7 +159,7 @@ def list():
     # Print's/Build's the lines
     counter_alt = 0
     for a in ls_array:
-        print(cs.green + alphabet[counter_alt] + ")" + cs.quit + cs.blue + a[0] + cs.quit + ":")
+        print(green(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
         counter = 1
         for b in a[1]:
             print("      " + str(counter) + ". " + b)
@@ -172,8 +172,8 @@ def insert():
 
     #Check's if the note contains a ;
     if(args[3].find(";") != -1):
-        print(cs.red + "Error:" + cs.quit)
-        print("Having a -> " + cs.red + ";" + cs.quit + " in your note is " + cs.red + "forbidden!", "red" + cs.quit)
+        print(red("Error:"))
+        print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
         sys.exit()
 
     # Find's the group letter position from alphabet
@@ -296,9 +296,9 @@ def removegroup():
             group_exist = True
             break
     if(group_exist == True):
-        print(cs.red + "Error:", "red" + cs.quit)
+        print(red("Error:"))
         print("Cannot delete group:")
-        print("Group " + cs.magenta + "not empty." + cs.quit)
+        print("Group " + magenta("not empty."))
         return 0
 
     with open(BASEGROUPS, "r+") as f:
