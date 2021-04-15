@@ -32,6 +32,11 @@ def setup():
     created = colored(" created!", "magenta")
     exists = colored(" exists!", "green")
 
+    # Configuring todo app
+    print("")
+    print(colored("-"*54, "blue"))
+    print(colored(":: TODO App initial configuration\n", "magenta", attrs=["bold"]))
+    
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
         os.makedirs(BASEFOLDER, access_rights)
@@ -58,7 +63,7 @@ def setup():
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
-            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py")
+            file.write("#!/bin/sh \npython3 ~/.config/Wolfy-todo/todo.py $*")
         os.chmod(LAUNCHER, access_rights)
         print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
     else:
@@ -67,14 +72,12 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
-
-    print(colored("-"*54, "blue"))
-    print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
+    print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
-    #help()
+    print(colored("-"*54, "blue"))
+    print("")
 
 # Minifunctions
-
 def readgroupfile():
     file = open(BASEGROUPS, "r")
     lines = file.readlines()
@@ -354,55 +357,60 @@ def removedone():
     file.close()
 
 def help():
-    print("Simplistic todo terminal application created in Python3")
+    green_prompt = colored("  >>", "green")
     print("")
-    print("Setting an alias: 'alias todo='python3 /path/to/script.py' is highly recommended.")
-    print("If <cmd> is empty, the list command is executed.")
-    print("State: 1(red) -> Not started  2(yellow) -> Doing  3(green) -> Done")
-    print("")
+    print(colored("-"*54, "blue"))
+    print(colored(":: Simplistic todo terminal application created in Python3\n", "magenta", attrs=["bold"]))
+
+    print("If only " + colored("todo", "yellow") + " <cmd>, the list command is executed.")
+    print("If state:")
+    print("  1.",colored("red entry", "red"),"    -> Not started")
+    print("  2.",colored("yellow entry", "yellow")," -> Doing")
+    print("  3.",colored("green entry", "green"),"  -> Done\n")
+
     print("Usage: todo <cmd> <arg1> ...")
     print("Commands and args:")
-    print("  l or list -> Print all the notes")
-    print("    No parameters")
+    print(green_prompt,"  l or list -> Print all the notes")
+    print(green_prompt,"    No parameters")
     print("")
-    print("  i or insert -> Insert a note")
-    print("    <group_char> <note>")
+    print(green_prompt,"  i or insert -> Insert a note")
+    print(green_prompt,"    <group_char> <note>")
     print("")
-    print("  r or remove -> Remove a note")
-    print("    <group_char><note_nr>")
+    print(green_prompt,"  r or remove -> Remove a note")
+    print(green_prompt,"    <group_char><note_nr>")
     print("")
-    print("  e or edit -> Edit a note's text")
-    print("    <group_char><note_nr> <note>")
+    print(green_prompt,"  e or edit -> Edit a note's text")
+    print(green_prompt,"    <group_char><note_nr> <note>")
     print("")
-    print("  mg or makegroup -> Make a group")
-    print("    <group_name>")
+    print(green_prompt,"  mg or makegroup -> Make a group")
+    print(green_prompt,"    <group_name>")
     print("")
-    print("  rg or removegroup -> Remove a group")
-    print("    <group_name>")
+    print(green_prompt,"  rg or removegroup -> Remove a group")
+    print(green_prompt,"    <group_name>")
     print("")
-    print("  s or state -> Change the state of a note")
-    print("    <group_char><note_nr> <state>")
+    print(green_prompt,"  s or state -> Change the state of a note")
+    print(green_prompt,"    <group_char><note_nr> <state>")
     print("")
-    print("  rd or removedone -> Remove all done(green state) notes")
-    print("    No parameters")
+    print(green_prompt,"  rd or removedone -> Remove all done(green state) notes")
+    print(green_prompt,"    No parameters")
     print("")
     print("Examples:")
     print("Inserting a note 'Homework!' into the first group(School group):")
-    print("  todo i a Homework!")
+    print(green_prompt,"  todo i a Homework!")
     print("")
     print("Removing the eleventh note from the second group:")
-    print("  todo r b11")
+    print(green_prompt,"  todo r b11")
     print("")
     print("List all the notes:")
-    print("  todo")
+    print(green_prompt,"  todo")
     print("")
     print("Edit the first note from second group to show 'Hello!':")
-    print("  todo e b1 Hello!")
+    print(green_prompt,"  todo e b1 Hello!")
     print("")
     print("Change the state of first group, third note to done(green):")
-    print("  todo s a3 3")
+    print(green_prompt,"  todo s a3 3")
     print("")
-    print("Made by: Mr.Wolfy and Tux-Code")
+    print("Made by: Mr.Wolfy and Tux-Code\n")
 
 def main():
 
