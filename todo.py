@@ -32,14 +32,11 @@ def setup():
     created = colored(" created!", "magenta")
     exists = colored(" exists!", "green")
 
-<<<<<<< HEAD
-=======
     # Configuring todo app
     print("")
     print(colored("-"*54, "blue"))
     print(colored(":: TODO App initial configuration\n", "magenta", attrs=["bold"]))
     
->>>>>>> 25dfbdc7e7833d2fa3268b03af021c32b1080658
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
         os.makedirs(BASEFOLDER, access_rights)
@@ -75,7 +72,6 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
-<<<<<<< HEAD
 
     print(colored("-"*54, "blue"))
     print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
@@ -84,14 +80,12 @@ def setup():
 
 # Minifunctions
 
-=======
     print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
     print(colored("-"*54, "blue"))
     print("")
 
 # Minifunctions
->>>>>>> 25dfbdc7e7833d2fa3268b03af021c32b1080658
 def readgroupfile():
     file = open(BASEGROUPS, "r")
     lines = file.readlines()
