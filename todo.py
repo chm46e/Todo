@@ -71,6 +71,7 @@ def setup():
         
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
+    os.system("cp colors.py $HOME/.config/Wolfy-todo")
 
     print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
