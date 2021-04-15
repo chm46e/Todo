@@ -1,10 +1,7 @@
 import os.path
 import sys
 import subprocess as sp
-from termcolor import colored
-
-# Ideas;
-#  remove all green state notes
+from colors import *
 
 # Global variables
 args = sys.argv
@@ -27,10 +24,10 @@ access_rights = 0o755
 
 # Create target Directory and files if they don't exist
 def setup():
-    red_prompt = colored(">>", "red")
-    green_prompt = colored(">>", "green")
-    created = colored(" created!", "magenta")
-    exists = colored(" exists!", "green")
+    red_prompt = red(">>")
+    green_prompt = green(">>")
+    created = magenta(" created!")
+    exists = green(" exists!")
 
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
@@ -67,9 +64,9 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
-    print(colored("-"*54, "blue"))
-    print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
-    print("Type " + colored("--help", "yellow") + " for some tips!")
+    print(blue("-"*54))
+    print(cs.bold + cs.magenta + "All set!" + cs.quit + " Enjoy your note taking!")
+    print("Type " + yellow("--help") + " for some tips!")
     #help()
 
 # Minifunctions
@@ -78,8 +75,8 @@ def readgroupfile():
     try:
         file = open(BASEGROUPS, "r")
     except:
-        print(colored("Groupfile", "magenta") + " missing:")
-        print(colored("Running setup:", "green"))
+        print(magenta("Groupfile") + " missing:")
+        print(green("Running setup:"))
         print(" ")
         setup()
         sys.exit()
@@ -92,8 +89,8 @@ def readnotefile():
     try:
         file = open(BASENOTES, "r")
     except:
-        print(colored("Notefile", "magenta") + " missing:")
-        print(colored("Running setup:", "red"))
+        print(magenta("Notefile") + " missing:")
+        print(red("Running setup:"))
         print(" ")
         setup()
         sys.exit()
@@ -136,14 +133,14 @@ def list():
 
         # Change the color depending on the state
         if(state == "1"):
-            color = "red"
+            color = cs.red
         elif(state == "2"):
-            color = "yellow"
+            color = cs.yellow
         elif(state == "3"):
-            color = "green"
+            color = cs.green
 
         # Create the colored note
-        colored_note = colored(note, color)
+        colored_note = color + note + cs.quit
 
         # Tries to find a group match(group array and line group)
         group_counter = 0
@@ -161,8 +158,7 @@ def list():
     # Print's/Build's the lines
     counter_alt = 0
     for a in ls_array:
-        print(colored(alphabet[counter_alt] + ")",
-                      "green") + colored(a[0], "blue") + ":")
+        print(green(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
         counter = 1
         for b in a[1]:
             print("      " + str(counter) + ". " + b)
@@ -175,8 +171,8 @@ def insert():
 
     #Check's if the note contains a ;
     if(args[3].find(";") != -1):
-        print(colored("Error:", "red"))
-        print("Having a -> " + colored(";", "red") + " in your note is " + colored("forbidden!", "red"))
+        print(red("Error:"))
+        print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
         sys.exit()
 
     # Find's the group letter position from alphabet
@@ -299,9 +295,9 @@ def removegroup():
             group_exist = True
             break
     if(group_exist == True):
-        print(colored("Error:", "red"))
+        print(red("Error:"))
         print("Cannot delete group:")
-        print("Group " + colored("not empty.", "magenta"))
+        print("Group " + magenta("not empty."))
         return 0
 
     with open(BASEGROUPS, "r+") as f:
