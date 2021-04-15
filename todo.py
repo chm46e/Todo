@@ -1,14 +1,10 @@
 import os.path
 import sys
 import subprocess as sp
-<<<<<<< HEAD
 from termcolor import colored
 
 # Ideas;
 #  remove all green state notes
-=======
-from colors import *
->>>>>>> e33fb151eae1b412079fc4aee91029581194b891
 
 # Global variables
 args = sys.argv
@@ -31,17 +27,10 @@ access_rights = 0o755
 
 # Create target Directory and files if they don't exist
 def setup():
-<<<<<<< HEAD
     red_prompt = colored(">>", "red")
     green_prompt = colored(">>", "green")
     created = colored(" created!", "magenta")
     exists = colored(" exists!", "green")
-=======
-    red_prompt = red(">>")
-    green_prompt = green(">>")
-    created = magenta(" created!")
-    exists = green(" exists!")
->>>>>>> e33fb151eae1b412079fc4aee91029581194b891
 
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
@@ -53,11 +42,7 @@ def setup():
     # Test if note file exist and create it
     if not os.path.isfile(BASENOTES):
         with open(BASENOTES, "w") as file:
-<<<<<<< HEAD
             file.write("First_note!")
-=======
-            file.write("This is a 'not started' state note.;1;Notes\nThis is a 'started/doing' state note.;2;Notes\nThis is a 'Done' state note.;3;Notes\n")
->>>>>>> e33fb151eae1b412079fc4aee91029581194b891
         print(red_prompt," Groups file ", BASENOTES.replace(HOMEFOLDER, "~") + " ", created)
     else:
         print(green_prompt," File ", BASENOTES.replace(HOMEFOLDER, "~"), " already", exists)
@@ -65,11 +50,7 @@ def setup():
     # Test if group file exist and create it
     if not os.path.isfile(BASEGROUPS):
         with open(BASEGROUPS, "w") as file:
-<<<<<<< HEAD
             file.write("Welcome")
-=======
-            file.write("Notes\n")
->>>>>>> e33fb151eae1b412079fc4aee91029581194b891
         print(red_prompt," Notes file ", BASEGROUPS.replace(HOMEFOLDER, "~") + " ", created)
     else:
         print(green_prompt," File ", BASEGROUPS.replace(HOMEFOLDER, "~"), "already", exists)
@@ -86,16 +67,10 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
-<<<<<<< HEAD
 
     print(colored("-"*54, "blue"))
     print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
-=======
-    print(blue("-"*54))
-    print(cs.bold + cs.magenta + "All set!" + cs.quit + " Enjoy your note taking!")
-    print("Type " + yellow("--help") + " for some tips!")
->>>>>>> e33fb151eae1b412079fc4aee91029581194b891
     #help()
 
 # Minifunctions
