@@ -72,10 +72,18 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
+<<<<<<< HEAD
     print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
     print(colored("-"*54, "blue"))
     print("")
+=======
+
+    print(colored("-"*54, "blue"))
+    print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
+    print("Type " + colored("--help", "yellow") + " for some tips!")
+    #help()
+>>>>>>> 3aea1ec (minor changes)
 
 # Minifunctions
 def readgroupfile():
