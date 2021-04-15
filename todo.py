@@ -63,7 +63,7 @@ def setup():
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
-            file.write("#!/bin/sh \npython3 ~/.config/Wolfy-todo/todo.py $*")
+            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py $*")
         os.chmod(LAUNCHER, access_rights)
         print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
     else:
@@ -72,29 +72,35 @@ def setup():
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
 
-<<<<<<< HEAD
     print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
     print("Type " + colored("--help", "yellow") + " for some tips!")
     print(colored("-"*54, "blue"))
     print("")
-=======
-
-    print(colored("-"*54, "blue"))
-    print(colored("All set!", "magenta", attrs=["bold"]) + " Enjoy your note taking!")
-    print("Type " + colored("--help", "yellow") + " for some tips!")
-    #help()
->>>>>>> 3aea1ec (minor changes)
 
 # Minifunctions
 def readgroupfile():
-    file = open(BASEGROUPS, "r")
+    try:
+        file = open(BASEGROUPS, "r")
+    except:
+        print(magenta("Groupfile") + " missing:")
+        print(green("Running setup:"))
+        print(" ")
+        setup()
+        sys.exit()
     lines = file.readlines()
     file.close()
     return lines
 
 
 def readnotefile():
-    file = open(BASENOTES, "r")
+    try:
+        file = open(BASENOTES, "r")
+    except:
+        print(magenta("Notefile") + " missing:")
+        print(red("Running setup:"))
+        print(" ")
+        setup()
+        sys.exit()
     lines = file.readlines()
     file.close()
     return lines
@@ -130,18 +136,18 @@ def list():
         # Split's the line by the space delimiter and put's them into variables
         lines = readnotefile()
         line = lines[counter].replace("\n", "")
-        note, state, group = line.split()
+        note, state, group = line.split(";")
 
         # Change the color depending on the state
         if(state == "1"):
-            color = "red"
+            color = cs.red
         elif(state == "2"):
-            color = "yellow"
+            color = cs.yellow
         elif(state == "3"):
-            color = "green"
+            color = cs.green
 
         # Create the colored note
-        colored_note = colored(note, color)
+        colored_note = color + note + cs.quit
 
         # Tries to find a group match(group array and line group)
         group_counter = 0
@@ -159,8 +165,7 @@ def list():
     # Print's/Build's the lines
     counter_alt = 0
     for a in ls_array:
-        print(colored(alphabet[counter_alt] + ")",
-                      "green") + colored(a[0], "blue") + ":")
+        print(green(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
         counter = 1
         for b in a[1]:
             print("      " + str(counter) + ". " + b)
@@ -170,6 +175,12 @@ def list():
 
 def insert():
     # todo i <group_char> <note>
+
+    #Check's if the note contains a ;
+    if(args[3].find(";") != -1):
+        print(red("Error:"))
+        print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
+        sys.exit()
 
     # Find's the group letter position from alphabet
     char_pos = alphabet.find(args[2])
@@ -184,7 +195,7 @@ def insert():
 
             # Append's the note to the end of the note file
             file = open(BASENOTES, "a")
-            file.write(args[3] + " 1 " + group + "\n")
+            file.write(args[3] + ";1;" + group + "\n")
             file.close()
 
             break
@@ -215,7 +226,7 @@ def delete():
     counter = 0
     line_counter = 0
     for line in note_lines:
-        line_group = line.split()[2]
+        line_group = line.split(";")[2].replace("\n", "")
 
         # Check's if group is correct
         if(line_group == group):
@@ -254,8 +265,8 @@ def edit():
     counter = 0
     line_counter = 0
     for line in note_lines:
-        line_split = line.split()
-        line_group = line_split[2]
+        line_split = line.split(";")
+        line_group = line_split[2].replace("\n", "")
         line_state = line_split[1]
 
         # Check's if group is correct
@@ -267,10 +278,10 @@ def edit():
                 file.write(line)
             else:
                 if(args_len == 4):
-                    file.write(args[3] + " " + line_state +
-                               " " + args[4] + "\n")
+                    file.write(args[3] + ";" + line_state +
+                               ";" + args[4] + "\n")
                 else:
-                    file.write(args[3] + " " + line_state + " " + group + "\n")
+                    file.write(args[3] + ";" + line_state + ";" + group + "\n")
         else:
             file.write(line)
         line_counter += 1
@@ -287,12 +298,13 @@ def removegroup():
     group_exist = False
     lines = readnotefile()
     for line in lines:
-        if(line.split()[2].replace("\n", "") == args[2]):
+        if(line.split(";")[2].replace("\n", "") == args[2]):
             group_exist = True
             break
     if(group_exist == True):
+        print(red("Error:"))
         print("Cannot delete group:")
-        print("Group not empty.")
+        print("Group " + magenta("not empty."))
         return 0
 
     with open(BASEGROUPS, "r+") as f:
@@ -332,8 +344,8 @@ def changestate():
     counter = 0
     line_counter = 0
     for line in note_lines:
-        line_split = line.split()
-        line_group = line_split[2]
+        line_split = line.split(";")
+        line_group = line_split[2].replace("\n", "")
         line_note = line_split[0]
 
         # Check's if group is correct
@@ -342,7 +354,7 @@ def changestate():
 
             # Check's if count is correct
             if(note_nr == str(counter)):
-                file.write(line_note + " " + args[3] + " " + group + "\n")
+                file.write(line_note + ";" + args[3] + ";" + group + "\n")
             else:
                 file.write(line)
         else:
@@ -359,7 +371,7 @@ def removedone():
     file = open(BASENOTES, "w")
 
     for line in lines:
-        if(line.split()[1] != "3"):
+        if(line.split(";")[1] != "3"):
             file.write(line)
 
     file.close()
