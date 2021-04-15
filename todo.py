@@ -63,7 +63,7 @@ def setup():
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
-            file.write("#!/bin/sh \npython3 ~./config/Wolfy-todo/todo.py $*")
+            file.write("#!/bin/sh \npython3 ~/.config/Wolfy-todo/todo.py $*")
         os.chmod(LAUNCHER, access_rights)
         print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
     else:
@@ -76,6 +76,12 @@ def setup():
     print("Type " + colored("--help", "yellow") + " for some tips!")
     print(colored("-"*54, "blue"))
     print("")
+
+# Upgrade to the lasted from git to config folder 
+def upgrade():
+    os.system("rm ~/bin/todo")
+    os.system("rm ~/.config/Wolfy-todo/todo.py")
+    setup()
 
 # Minifunctions
 def readgroupfile():
@@ -136,7 +142,7 @@ def list():
         # Split's the line by the space delimiter and put's them into variables
         lines = readnotefile()
         line = lines[counter].replace("\n", "")
-        note, state, group = line.split(";")
+        note, state, group = line.split()
 
         # Change the color depending on the state
         if(state == "1"):
@@ -378,41 +384,42 @@ def removedone():
 
 def help():
     green_prompt = colored("  >>", "green")
+    grey_mod = colored("  --", "grey")
     print("")
     print(colored("-"*54, "blue"))
     print(colored(":: Simplistic todo terminal application created in Python3\n", "magenta", attrs=["bold"]))
 
-    print("If only " + colored("todo", "yellow") + " <cmd>, the list command is executed.")
+    print("If only <cmd>," + colored(" todo", "yellow") + ", the list command is executed.")
     print("If state:")
-    print("  1.",colored("red entry", "red"),"    -> Not started")
-    print("  2.",colored("yellow entry", "yellow")," -> Doing")
-    print("  3.",colored("green entry", "green"),"  -> Done\n")
+    print("  1.",colored("Red entry", "red"),"    -> Not started")
+    print("  2.",colored("Yellow entry", "yellow")," -> Doing")
+    print("  3.",colored("Green entry", "green"),"  -> Done\n")
 
     print("Usage: todo <cmd> <arg1> ...")
     print("Commands and args:")
     print(green_prompt,"  l or list -> Print all the notes")
-    print(green_prompt,"    No parameters")
+    print(grey_mod,"    No parameters")
     print("")
     print(green_prompt,"  i or insert -> Insert a note")
-    print(green_prompt,"    <group_char> <note>")
+    print(grey_mod,"    <group_char> <note>")
     print("")
     print(green_prompt,"  r or remove -> Remove a note")
-    print(green_prompt,"    <group_char><note_nr>")
+    print(grey_mod,"    <group_char><note_nr>")
     print("")
     print(green_prompt,"  e or edit -> Edit a note's text")
-    print(green_prompt,"    <group_char><note_nr> <note>")
+    print(grey_mod,"    <group_char><note_nr> <note>")
     print("")
     print(green_prompt,"  mg or makegroup -> Make a group")
-    print(green_prompt,"    <group_name>")
+    print(grey_mod,"    <group_name>")
     print("")
     print(green_prompt,"  rg or removegroup -> Remove a group")
-    print(green_prompt,"    <group_name>")
+    print(grey_mod,"    <group_name>")
     print("")
     print(green_prompt,"  s or state -> Change the state of a note")
-    print(green_prompt,"    <group_char><note_nr> <state>")
+    print(grey_mod,"    <group_char><note_nr> <state>")
     print("")
     print(green_prompt,"  rd or removedone -> Remove all done(green state) notes")
-    print(green_prompt,"    No parameters")
+    print(grey_mod,"    No parameters")
     print("")
     print("Examples:")
     print("Inserting a note 'Homework!' into the first group(School group):")
@@ -440,6 +447,10 @@ def main():
     elif args[1] == "setup":
         # todo setup
         setup()
+    
+    elif args[1] == "upgrade":
+        # todo setup
+        upgrade()
 
     elif args[1] == "i" or args[1] == "insert":
         # todo i <note> <group>
