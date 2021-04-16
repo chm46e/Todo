@@ -1,7 +1,7 @@
 import os.path
 import sys
 import subprocess as sp
-from termcolor import colored
+from colors import *
 
 # Ideas;
 #  remove all green state notes
@@ -27,16 +27,16 @@ access_rights = 0o755
 
 # Create target Directory and files if they don't exist
 def setup():
-    red_prompt = colored(">>", "red")
-    green_prompt = colored(">>", "green")
-    created = colored(" created!", "magenta")
-    exists = colored(" exists!", "green")
+    red_prompt = red(">>")
+    green_prompt = green(">>")
+    created = magenta(" created!")
+    exists = green(" exists!")
 
     # Configuring todo app
     print("")
-    print(colored("-"*54, "blue"))
-    print(colored(":: TODO App initial configuration\n", "magenta", attrs=["bold"]))
-    
+    print(blue("-"*54))
+    print(cs.bold + magenta(":: TODO App initial configuration\n"))
+
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
         os.makedirs(BASEFOLDER, access_rights)
@@ -47,7 +47,7 @@ def setup():
     # Test if note file exist and create it
     if not os.path.isfile(BASENOTES):
         with open(BASENOTES, "w") as file:
-            file.write("First_note!")
+            file.write("This is a 'not started' state note.;1;Notes\nThis is a 'started/doing' state note.;2;Notes\nThis is a 'Done' state note.;3;Notes\n")
         print(red_prompt," Groups file ", BASENOTES.replace(HOMEFOLDER, "~") + " ", created)
     else:
         print(green_prompt," File ", BASENOTES.replace(HOMEFOLDER, "~"), " already", exists)
@@ -55,7 +55,7 @@ def setup():
     # Test if group file exist and create it
     if not os.path.isfile(BASEGROUPS):
         with open(BASEGROUPS, "w") as file:
-            file.write("Welcome")
+            file.write("Notes\n")
         print(red_prompt," Notes file ", BASEGROUPS.replace(HOMEFOLDER, "~") + " ", created)
     else:
         print(green_prompt," File ", BASEGROUPS.replace(HOMEFOLDER, "~"), "already", exists)
@@ -73,9 +73,10 @@ def setup():
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
     os.system("cp colors.py $HOME/.config/Wolfy-todo")
 
-    print(colored("\n:: All set!", "magenta", attrs=["bold"]) + " \nEnjoy your note taking!")
-    print("Type " + colored("--help", "yellow") + " for some tips!")
-    print(colored("-"*54, "blue"))
+    print(" ")
+    print(cs.bold + cs.magenta + ":: All set!" + cs.quit + " \nEnjoy your note taking!")
+    print("Type " + yellow("--help") + " for some tips!")
+    print(blue("-"*54))
     print("")
 
 # Upgrade to the lasted from git to config folder 
@@ -91,7 +92,6 @@ def readgroupfile():
     except:
         print(magenta("Groupfile") + " missing:")
         print(green("Running setup:"))
-        print(" ")
         setup()
         sys.exit()
     lines = file.readlines()
@@ -105,7 +105,6 @@ def readnotefile():
     except:
         print(magenta("Notefile") + " missing:")
         print(red("Running setup:"))
-        print(" ")
         setup()
         sys.exit()
     lines = file.readlines()
@@ -143,7 +142,7 @@ def list():
         # Split's the line by the space delimiter and put's them into variables
         lines = readnotefile()
         line = lines[counter].replace("\n", "")
-        note, state, group = line.split()
+        note, state, group = line.split(";")
 
         # Change the color depending on the state
         if(state == "1"):
@@ -312,7 +311,7 @@ def removegroup():
         print(red("Error:"))
         print("Cannot delete group:")
         print("Group " + magenta("not empty."))
-        return 0
+        return 1
 
     with open(BASEGROUPS, "r+") as f:
         new_f = f.readlines()
@@ -329,6 +328,8 @@ def removegroup():
 
 def changestate():
     # todo s <group_char + note_nr> <state>
+
+    color = "3" #Default color
 
     group_char = args[2][0]
     note_nr = args[2].replace(args[2][0], "")
@@ -361,7 +362,16 @@ def changestate():
 
             # Check's if count is correct
             if(note_nr == str(counter)):
-                file.write(line_note + ";" + args[3] + ";" + group + "\n")
+                if(args[3] == "red"):
+                    color = "1"
+                elif(args[3] == "yellow"):
+                    color = "2"
+                elif(args[3] == "green"):
+                    color = "3"
+                else:
+                    color = args[3]
+
+                file.write(line_note + ";" + color + ";" + group + "\n")
             else:
                 file.write(line)
         else:
@@ -386,18 +396,18 @@ def removedone():
 def help():
     green_prompt = colored("  >>", "green")
     grey_mod = colored("  --", "grey")
+
     print("")
-    print(colored("-"*54, "blue"))
-    print(colored(":: Simplistic todo terminal application created in Python3\n", "magenta", attrs=["bold"]))
+    print(blue("-"*54))
+    print(cs.bold + magenta(":: Simplistic todo terminal application created in Python3"))
+    print(lcyan("States:"))
+    print("  1.",red("Red entry"),red("    -> Not started"))
+    print("  2.",yellow("Yellow entry"),yellow(" -> Doing"))
+    print("  3.",green("Green entry"),green("  -> Done\n"))
 
-    print("If only <cmd>," + colored(" todo", "yellow") + ", the list command is executed.")
-    print("If state:")
-    print("  1.",colored("Red entry", "red"),"    -> Not started")
-    print("  2.",colored("Yellow entry", "yellow")," -> Doing")
-    print("  3.",colored("Green entry", "green"),"  -> Done\n")
-
-    print("Usage: todo <cmd> <arg1> ...")
-    print("Commands and args:")
+    print("")
+    print(lcyan("Usage") + ": todo <cmd> <arg1> ...")
+    print(lcyan("Commands and args:"))
     print(green_prompt,"  l or list -> Print all the notes")
     print(grey_mod,"    No parameters")
     print("")
@@ -438,7 +448,8 @@ def help():
     print("Change the state of first group, third note to done(green):")
     print(green_prompt,"  todo s a3 3")
     print("")
-    print("Made by: Mr.Wolfy and Tux-Code\n")
+    print("Made by: Mr.Wolfy and Tux-Code")
+    print("")
 
 def main():
 
