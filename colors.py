@@ -40,3 +40,9 @@ def magenta(str):
 
 def yellow(str):
     return cs.orange + str + cs.quit
+
+def lgrey(str):
+    return cs.lgrey + str + cs.quit
+
+def lcyan(str):
+    return cs.lcyan + str + cs.quit

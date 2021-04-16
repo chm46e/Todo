@@ -394,8 +394,8 @@ def removedone():
     file.close()
 
 def help():
-    green_prompt = colored("  >>", "green")
-    grey_mod = colored("  --", "grey")
+    green_prompt = green("  >>")
+    grey_mod = lgrey("  --")
 
     print("")
     print(blue("-"*54))
