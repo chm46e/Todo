@@ -4,7 +4,7 @@ import subprocess as sp
 from colors import *
 
 # Ideas;
-#  remove all green state notes
+#  remove all green state notes #Green notes are good for other who will work on the code later
 
 # Global variables
 args = sys.argv
@@ -40,34 +40,34 @@ def setup():
     # Test if main folder exists and creates it
     if not os.path.exists(BASEFOLDER):
         os.makedirs(BASEFOLDER, access_rights)
-        print(red_prompt, " Directory ", BASEFOLDER.replace(HOMEFOLDER, "~"), " "*7, created)
+        print(red_prompt, " Folder   ", BASEFOLDER.replace(HOMEFOLDER, "~"), " "*5, created)
     else:
-        print(green_prompt," Directory ", BASEFOLDER.replace(HOMEFOLDER, "~"), " already", exists)
+        print(green_prompt," Folder   ", BASEFOLDER.replace(HOMEFOLDER, "~"), " "*6, exists)
 
     # Test if note file exist and create it
     if not os.path.isfile(BASENOTES):
         with open(BASENOTES, "w") as file:
             file.write("This is a 'not started' state note.;1;Notes\nThis is a 'started/doing' state note.;2;Notes\nThis is a 'Done' state note.;3;Notes\n")
-        print(red_prompt," Groups file ", BASENOTES.replace(HOMEFOLDER, "~") + " ", created)
+        print(red_prompt," Groups   ", BASENOTES.replace(HOMEFOLDER, "~") + " ", created)
     else:
-        print(green_prompt," File ", BASENOTES.replace(HOMEFOLDER, "~"), " already", exists)
+        print(green_prompt," Groups   ", BASENOTES.replace(HOMEFOLDER, "~") + " "*2, exists)
 
     # Test if group file exist and create it
     if not os.path.isfile(BASEGROUPS):
         with open(BASEGROUPS, "w") as file:
             file.write("Notes\n")
-        print(red_prompt," Notes file ", BASEGROUPS.replace(HOMEFOLDER, "~") + " ", created)
+        print(red_prompt," Notes    ", BASEGROUPS.replace(HOMEFOLDER, "~"), created)
     else:
-        print(green_prompt," File ", BASEGROUPS.replace(HOMEFOLDER, "~"), "already", exists)
+        print(green_prompt," Notes    ", BASEGROUPS.replace(HOMEFOLDER, "~") + " ", exists)
 
     # Adding launcher
     if not os.path.isfile(LAUNCHER):
         with open(LAUNCHER, "w") as file:
             file.write("#!/bin/sh \npython3 ~/.config/Wolfy-todo/todo.py $*")
         os.chmod(LAUNCHER, access_rights)
-        print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*19, created)
+        print(red_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*16, created)
     else:
-        print(green_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*11, " already", exists)
+        print(green_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*17, exists)
         
     # Copy script to config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
