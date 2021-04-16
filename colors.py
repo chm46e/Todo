@@ -46,3 +46,6 @@ def lgrey(str):
 
 def lcyan(str):
     return cs.lcyan + str + cs.quit
+
+def lblue(str):
+    return cs.lblue + str + cs.quit
