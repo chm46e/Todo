@@ -311,12 +311,19 @@ def edit():
         # Check's if group is correct
         if(line_group == group):
             counter += 1
-
             # Check's if count is not correct
             if(note_nr != str(counter)):
                 file.write(line)
             else:
-                file.write(args[3] + ";" + line_state + ";" + group + "\n")
+                if(args_len >= 4):
+                    counter_alt = 0
+                    string = ""
+                    while counter_alt != args_len - 2:
+                        counter_alt+=1
+                        string = string + args[counter_alt+2] + " "
+                    file.write(string[:-1] + ";" + line_state + ";" + group + "\n")
+                else:   
+                    file.write(args[3] + ";1;" + group + "\n")
         else:
             file.write(line)
         line_counter += 1
@@ -782,6 +789,7 @@ def main():
             sys.exit()
 
         editgroup()
+        list()
 
     elif args[1] == "s" or args[1] == "state":
         try:
