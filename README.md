@@ -1,13 +1,13 @@
 # Todo
-A Simple Todo Application
+A Simple Todo Application\
 Compatible with Python3.0+
 
 ## Screenshot
 ![](https://i.imgur.com/Ai3cSF5.png)
 
 ## Description
-A super simple todo application created in Python3.
-Finally, no tidious online note keeping,
+A super simple todo application created in Python3.\
+Finally, no tidious online note keeping,\
 Work offline in the terminal, no logging required.
 
 #### Core features
@@ -35,7 +35,7 @@ $ python3 todo.py setup
 Note: The alias `todo` is created automatically, no need to create it yourself.
 
 #### You should be good to go!
-Run: `todo -h` to get general info about the commands.
+Run: `todo -h` to get general info about the commands.\
 Run: `todo <cmd> -h` to get specific info about a command.
 
 #### Tips
