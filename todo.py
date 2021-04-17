@@ -179,10 +179,15 @@ def list():
 def insert():
     # todo i <group_char> <note>
 
-    #Check's if the note contains a ;
-    if(args[3].find(";") != -1):
+    if(args_len >= 3):
+        if(args[3].find(";") != -1):
+            print(red("Error:"))
+            print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
+            sys.exit()
+    else:
         print(red("Error:"))
-        print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
+        print("Not enough arguments supplied.")
+        print("Use 'todo insert -h' for help.")
         sys.exit()
 
     # Find's the group letter position from alphabet
@@ -198,7 +203,16 @@ def insert():
 
             # Append's the note to the end of the note file
             file = open(BASENOTES, "a")
-            file.write(args[3] + ";1;" + group + "\n")
+            if(args_len >= 4):
+                counter_alt = 0
+                string = ""
+                while counter_alt != args_len - 2:
+                    counter_alt+=1
+
+                    string = string + args[counter_alt+2] + " "
+                file.write(string[:-1] + ";1;" + group + "\n")
+            else:
+                file.write(args[3] + ";1;" + group + "\n")
             file.close()
 
             break
