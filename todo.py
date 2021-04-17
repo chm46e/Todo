@@ -168,6 +168,20 @@ def list():
             color = cs.yellow
         elif(state == "3"):
             color = cs.green
+        elif(state == "black"):
+            color = cs.black
+        elif(state == "orange"):
+            color = cs.orange
+        elif(state == "blue"):
+            color = cs.blue
+        elif(state == "purple" or state == "magenta"):
+            color = cs.magenta
+        elif(state == "cyan"):
+            color = cs.cyan
+        elif(state == "pink"):
+            color = cs.pink
+        elif(state == "lcyan"):
+            color = cs.pink
 
         # Creates the colored note
         colored_note = color + note + cs.quit
@@ -188,7 +202,7 @@ def list():
     # Build's the lines
     counter_alt = 0
     for a in ls_array:
-        print(green(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
+        print(magenta(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
         counter = 1
         for b in a[1]:
             print("      " + str(counter) + ". " + b)
@@ -546,6 +560,8 @@ def showargs(usage_array, args_array, ex_array):
 #=============================================================================
 
 def main():
+    helpin = False
+
     #Checks if no args were supplied
     if args_len == 0:
         help()
@@ -569,13 +585,9 @@ def main():
             upgrade()
 
     elif args[1] == "i" or args[1] == "insert":
-        if(args_len < 3):
-            print(red("ERROR:"))
-            print("Not enough arguments!")
-            print("Use: todo insert -h for arguments")
-            sys.exit()
-        if(args_len >= 2):
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo insert <arg1> <arg2>", 
                          " todo i <arg1> <arg2>"
                         ]
@@ -589,11 +601,20 @@ def main():
                 print(magenta(":: Inserts a note"))
                 print("")
                 showargs(usage, arguments, examples)
-            insert()
-            list()
-        else:
-            insert()
-            list()
+        except:
+            pass
+
+        if(args_len < 3 and helpin == False):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo insert -h for arguments")
+            sys.exit()
+
+        if(helpin == True):
+            sys.exit()
+
+        insert()
+        list()
 
     elif args[1] == "l" or args[1] == "list":
         if(args_len >= 2):
@@ -613,14 +634,9 @@ def main():
             list()
 
     elif args[1] == "d" or args[1] == "delete" or args[1] == "r" or args[1] == "remove":
-        if(args_len < 2):
-            print(red("ERROR:"))
-            print("Not enough arguments!")
-            print("Use: todo remove -h for arguments")
-            sys.exit()
-
-        if(args_len >= 2):
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo remove <arg1>",
                          " todo r <arg1>",
                          " todo delete <arg1>",
@@ -634,22 +650,25 @@ def main():
                 print(magenta(":: Removes a note"))
                 print("")
                 showargs(usage, arguments, examples)
-            # todo d <group> <note_nr>
-            delete()
-            list()
-        else:
-            delete()
-            list()
+        except:
+            pass
 
-    elif args[1] == "e" or args[1] == "edit":
-        if(args_len < 3):
+        if(args_len < 2 and helpin == False):
             print(red("ERROR:"))
             print("Not enough arguments!")
-            print("Use: todo edit -h for arguments")
+            print("Use: todo remove -h for arguments")
             sys.exit()
 
-        if(args_len >= 2):
+        if(helpin == True):
+            sys.exit()
+
+        delete()
+        list()
+
+    elif args[1] == "e" or args[1] == "edit":
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo edit <arg1> <arg2>",
                          " todo e <arg1> <arg2>"
                 ]
@@ -662,21 +681,26 @@ def main():
                 print(magenta(":: Edits a note's text"))
                 print("")
                 showargs(usage, arguments, examples)
-            edit()
-            list()
-        else:
-            edit()
-            list()
+        except:
+            pass
 
-    elif args[1] == "mg" or args[1] == "makegroup":
-        if(args_len < 2):
+        if(args_len < 3 and helpin == False):
             print(red("ERROR:"))
             print("Not enough arguments!")
-            print("Use: todo makegroup -h for arguments")
+            print("Use: todo edit -h for arguments")
             sys.exit()
 
-        if(args_len >= 2):
+        if(helpin == True):
+            sys.exit()
+
+        edit()
+        list()
+
+
+    elif args[1] == "mg" or args[1] == "makegroup":
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo makegroup <arg1>",
                          " todo mg <arg1>"
                 ]
@@ -686,21 +710,25 @@ def main():
                 print(magenta(":: Makes a group"))
                 print("")
                 showargs(usage, arguments, examples)
-            makegroup()
-            list()
-        else:
-            makegroup()
-            list()
+        except:
+            pass
 
-    elif args[1] == "rg" or args[1] == "removegroup":
-        if(args_len < 2):
+        if(args_len < 2 and helpin == False):
             print(red("ERROR:"))
             print("Not enough arguments!")
-            print("Use: todo removegroup -h for arguments")
+            print("Use: todo makegroup -h for arguments")
             sys.exit()
 
-        if(args_len >= 2):
+        if(helpin == True):
+            sys.exit()
+
+        makegroup()
+        list()
+
+    elif args[1] == "rg" or args[1] == "removegroup":
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo removegroup <arg1>",
                          " todo rg <arg1>"
                 ]
@@ -710,19 +738,24 @@ def main():
                 print(magenta(":: Removes a group"))
                 print("")
                 showargs(usage, arguments, examples)
-            removegroup()
-        else:
-            removegroup()
+        except:
+            pass
 
-    elif args[1] == "eg" or args[1] == "editgroup":
-        if(args_len < 3):
+        if(args_len < 2 and helpin == False):
             print(red("ERROR:"))
             print("Not enough arguments!")
-            print("Use: todo editgroup -h for arguments")
+            print("Use: todo removegroup -h for arguments")
             sys.exit()
 
-        if(args_len >= 2):
+        if(helpin == True):
+            sys.exit()
+
+        removegroup()
+
+    elif args[1] == "eg" or args[1] == "editgroup":
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo editgroup <arg1> <arg2>", 
                          " todo eg <arg1> <arg2>"
                 ]
@@ -736,19 +769,24 @@ def main():
                 print(magenta(":: Edits a note's group"))
                 print("")
                 showargs(usage, arguments, examples)
-            editgroup()
-        else:
-            editgroup()
+        except:
+            pass
 
-    elif args[1] == "s" or args[1] == "state":
-        if(args_len < 3):
+        if(args_len < 3 and helpin == False):
             print(red("ERROR:"))
             print("Not enough arguments!")
-            print("Use: todo state -h for arguments")
+            print("Use: todo editgroup -h for arguments")
             sys.exit()
 
-        if(args_len >= 2):
+        if(helpin == True):
+            sys.exit()
+
+        editgroup()
+
+    elif args[1] == "s" or args[1] == "state":
+        try:
             if(args[2] == "-h" or args[2] == "--help"):
+                helpin = True
                 usage = [" todo state <arg1> <arg2>",
                          " todo s <arg1> <arg2>"
                 ]
@@ -762,11 +800,21 @@ def main():
                 print(magenta(":: Changes the state of a note"))
                 print("")
                 showargs(usage, arguments, examples)
-            changestate()
-            list()
-        else:
-            changestate()
-            list()
+        except:
+            pass
+
+        if(args_len < 3 and helpin == False):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo state -h for arguments")
+            sys.exit()
+
+        if(helpin == True):
+            sys.exit()
+
+        changestate()
+        list()
+
 
     elif args[1] == "rd" or args[1] == "removedone":
         if(args_len >= 2):
@@ -785,7 +833,6 @@ def main():
             list()
 
     elif args[1] == "quit":
-        # todo setup
         sys.exit()
 
     elif args[1] == "-h" or args[1] == "--help" or args[1] == "h" or args[1] == "help":
@@ -798,7 +845,6 @@ def main():
                 print(magenta(":: Displays the help message"))
                 print("")
                 showargs(usage, arguments, examples)
-            # show help
             help()
         else:
             help()
