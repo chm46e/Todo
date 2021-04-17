@@ -569,6 +569,11 @@ def main():
             upgrade()
 
     elif args[1] == "i" or args[1] == "insert":
+        if(args_len < 3):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo insert -h for arguments")
+            sys.exit()
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo insert <arg1> <arg2>", 
@@ -608,6 +613,12 @@ def main():
             list()
 
     elif args[1] == "d" or args[1] == "delete" or args[1] == "r" or args[1] == "remove":
+        if(args_len < 2):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo remove -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo remove <arg1>",
@@ -631,6 +642,12 @@ def main():
             list()
 
     elif args[1] == "e" or args[1] == "edit":
+        if(args_len < 3):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo edit -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo edit <arg1> <arg2>",
@@ -652,6 +669,12 @@ def main():
             list()
 
     elif args[1] == "mg" or args[1] == "makegroup":
+        if(args_len < 2):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo makegroup -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo makegroup <arg1>",
@@ -670,6 +693,12 @@ def main():
             list()
 
     elif args[1] == "rg" or args[1] == "removegroup":
+        if(args_len < 2):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo removegroup -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo removegroup <arg1>",
@@ -686,6 +715,12 @@ def main():
             removegroup()
 
     elif args[1] == "eg" or args[1] == "editgroup":
+        if(args_len < 3):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo editgroup -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo editgroup <arg1> <arg2>", 
@@ -706,6 +741,12 @@ def main():
             editgroup()
 
     elif args[1] == "s" or args[1] == "state":
+        if(args_len < 3):
+            print(red("ERROR:"))
+            print("Not enough arguments!")
+            print("Use: todo state -h for arguments")
+            sys.exit()
+
         if(args_len >= 2):
             if(args[2] == "-h" or args[2] == "--help"):
                 usage = [" todo state <arg1> <arg2>",
