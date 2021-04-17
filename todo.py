@@ -294,11 +294,7 @@ def edit():
             if(note_nr != str(counter)):
                 file.write(line)
             else:
-                if(args_len == 4):
-                    file.write(args[3] + ";" + line_state +
-                               ";" + args[4] + "\n")
-                else:
-                    file.write(args[3] + ";" + line_state + ";" + group + "\n")
+                file.write(args[3] + ";" + line_state + ";" + group + "\n")
         else:
             file.write(line)
         line_counter += 1
@@ -335,6 +331,59 @@ def removegroup():
         f.truncate()
 
     list()
+
+def editgroup():
+    #check if group exists
+    exists = False
+    lines = readgroupfile()
+    for line in lines:
+        if(line.replace("\n", "") == args[3]):
+            exists = True
+
+    if(exists == False):
+        print(red("Error:"))
+        print("Group does not exist.")
+        sys.exit()
+
+    group_char = args[2][0]
+    note_nr = args[2].replace(args[2][0], "")
+
+    # Find's the group letter position from alphabet
+    char_pos = alphabet.find(group_char)
+
+    # Open's and read's the groups
+    group_lines = readgroupfile()
+
+    # Translates the group_char to a group name
+    group = group_lines[char_pos].replace("\n", "")
+
+    # Open's and read's the notes
+    note_lines = readnotefile()
+
+    # Open the note file in writing mode
+    file = open(BASENOTES, "w")
+
+    counter = 0
+    line_counter = 0
+    for line in note_lines:
+        line_split = line.split(";")
+        line_group = line_split[2].replace("\n", "")
+        line_state = line_split[1]
+        line_note = line_split[0]
+
+        # Check's if group is correct
+        if(line_group == group):
+            counter += 1
+
+            # Check's if count is not correct
+            if(note_nr != str(counter)):
+                file.write(line)
+            else:
+                file.write(line_note + ";" + line_state + ";" + args[3] + "\n")
+        else:
+            file.write(line)
+        line_counter += 1
+    file.close()
 
 
 def changestate():
@@ -421,6 +470,7 @@ def help():
     print(green_prompt + "  edit:" + "        Edits a note's text")
     print(green_prompt + "  makegroup:" + "   Makes a group")
     print(green_prompt + "  removegroup:" + " Removes a group")
+    print(green_prompt + "  editgroup:" + "   Edits a note's group")
     print(green_prompt + "  state:" + "       Changes the state of a note")
     print(green_prompt + "  removedone:" + "  Removes all " + green("done") + " notes")
     print("")
@@ -613,6 +663,26 @@ def main():
             removegroup()
         else:
             removegroup()
+
+    elif args[1] == "eg" or args[1] == "editgroup":
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo editgroup <arg1> <arg2>", 
+                         " todo eg <arg1> <arg2>"
+                ]
+                arguments = ["  <arg1>    The group char and note id combined(b3, a7)",
+                             "  <arg2>    The group name(Not the group char!)"
+                ]
+                examples = ["  todo editgroup b4 School",
+                            "  todo eg a7 Work"
+                ]
+
+                print(magenta(":: Edits a note's group"))
+                print("")
+                showargs(usage, arguments, examples)
+            editgroup()
+        else:
+            editgroup()
 
     elif args[1] == "s" or args[1] == "state":
         if(args_len >= 2):
