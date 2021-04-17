@@ -1,9 +1,17 @@
+#=============================================================================
+# Imports
+#=============================================================================
+
 import os.path
 import sys
 import subprocess as sp
 from colors import *
 
+
+#=============================================================================
 # Global variables
+#=============================================================================
+
 args = sys.argv
 args_len = len(args) - 1
 
@@ -22,7 +30,57 @@ alphabet = "abcdefghijklmonpqrstuvwxyz"
 # define the access rights
 access_rights = 0o755
 
-# Create target Directory and files if they don't exist
+
+#=============================================================================
+# Minifunctions
+#=============================================================================
+
+# Upgrade to the lasted from git to config folder 
+def upgrade():
+    os.system("rm ~/bin/todo")
+    os.system("rm ~/.config/Wolfy-todo/todo.py")
+    setup()
+
+# Reads the group file and returns the lines
+def readgroupfile():
+    try:
+        file = open(BASEGROUPS, "r")
+    except:
+        print(magenta("Groupfile") + " missing:")
+        print(green("Running setup:"))
+        setup()
+        sys.exit()
+    lines = file.readlines()
+    file.close()
+    return lines
+
+# Reads the note file and returns the lines
+def readnotefile():
+    try:
+        file = open(BASENOTES, "r")
+    except:
+        print(magenta("Notefile") + " missing:")
+        print(red("Running setup:"))
+        setup()
+        sys.exit()
+    lines = file.readlines()
+    file.close()
+    return lines
+
+# Gets the output of a shell command
+def output(cmd):
+    return sp.getoutput(cmd)
+
+# Runs a shell command
+def run(cmd):
+    return os.system(cmd)
+
+
+#=============================================================================
+# Main functions                                                            
+#=============================================================================
+
+# Setups the app to work out-of-the-box
 def setup():
     red_prompt = red(">>")
     green_prompt = green(">>")
@@ -66,59 +124,20 @@ def setup():
     else:
         print(green_prompt," Launcher ", LAUNCHER.replace(HOMEFOLDER, "~"), " "*17, exists)
         
-    # Copy script to config folder
+    # Copyies the scripts to the config folder
     os.system("cp todo.py $HOME/.config/Wolfy-todo")
     os.system("cp colors.py $HOME/.config/Wolfy-todo")
 
+    # Prints a neat message
     print(" ")
     print(cs.bold + cs.magenta + ":: All set!" + cs.quit + " \nEnjoy your note taking!")
     print("Type " + yellow("--help") + " for some tips!")
     print(blue("-"*54))
     print("")
 
-# Upgrade to the lasted from git to config folder 
-def upgrade():
-    os.system("rm ~/bin/todo")
-    os.system("rm ~/.config/Wolfy-todo/todo.py")
-    setup()
 
-# Minifunctions
-def readgroupfile():
-    try:
-        file = open(BASEGROUPS, "r")
-    except:
-        print(magenta("Groupfile") + " missing:")
-        print(green("Running setup:"))
-        setup()
-        sys.exit()
-    lines = file.readlines()
-    file.close()
-    return lines
-
-
-def readnotefile():
-    try:
-        file = open(BASENOTES, "r")
-    except:
-        print(magenta("Notefile") + " missing:")
-        print(red("Running setup:"))
-        setup()
-        sys.exit()
-    lines = file.readlines()
-    file.close()
-    return lines
-
-def output(cmd):
-    return sp.getoutput(cmd)
-
-def run(cmd):
-    return os.system(cmd)
-
-
-# Functions
+# Lists all the notes
 def list():
-    # todo l
-
     group_id = 0
     color = "red"  # The default color
     ls_array = []
@@ -134,14 +153,15 @@ def list():
     # Get's the note count
     line_count = len(readnotefile())
 
+    # Goes through each line in the notefile
     counter = 0
     while counter != line_count:
-        # Split's the line by the space delimiter and put's them into variables
+        # Split's the line by the ; delimiter and put's them into variables
         lines = readnotefile()
         line = lines[counter].replace("\n", "")
         note, state, group = line.split(";")
 
-        # Change the color depending on the state
+        # Changes the color depending on the state
         if(state == "1"):
             color = cs.red
         elif(state == "2"):
@@ -149,7 +169,7 @@ def list():
         elif(state == "3"):
             color = cs.green
 
-        # Create the colored note
+        # Creates the colored note
         colored_note = color + note + cs.quit
 
         # Tries to find a group match(group array and line group)
@@ -165,7 +185,7 @@ def list():
 
         counter += 1
 
-    # Print's/Build's the lines
+    # Build's the lines
     counter_alt = 0
     for a in ls_array:
         print(green(alphabet[counter_alt] + ")") + blue(a[0]) + ":")
@@ -175,40 +195,30 @@ def list():
             counter += 1
         counter_alt += 1
 
-
+# Inserts a note to the end of a group
 def insert():
-    # todo i <group_char> <note>
-
-    if(args_len >= 3):
-        if(args[3].find(";") != -1):
-            print(red("Error:"))
-            print("Having a -> " + red(";") + " in your note is " + red("forbidden!"))
-            sys.exit()
-    else:
-        print(red("Error:"))
-        print("Not enough arguments supplied.")
-        print("Use 'todo insert -h' for help.")
-        sys.exit()
-
-    # Find's the group letter position from alphabet
+    # Finds the group letter position from alphabet
     char_pos = alphabet.find(args[2])
 
-    # Open's and read's the groups
+    # Opens and reads the groups
     lines = readgroupfile()
 
+    # Goes through the lines in the groupfile
     counter = 0
     for line in lines:
+        # Checks if the group is correct
         if(counter == char_pos):
             group = line.replace("\n", "")
 
-            # Append's the note to the end of the note file
+            # Appends the note to the end of the note file
             file = open(BASENOTES, "a")
+
+            #Checks to see if there are more args and if so uses them
             if(args_len >= 4):
                 counter_alt = 0
                 string = ""
                 while counter_alt != args_len - 2:
                     counter_alt+=1
-
                     string = string + args[counter_alt+2] + " "
                 file.write(string[:-1] + ";1;" + group + "\n")
             else:
@@ -218,26 +228,25 @@ def insert():
             break
         counter += 1
 
-
+# Deletes a note
 def delete():
-    # todo d <group_char + note_nr>
-
+    # Retrieves the group char and note number
     group_char = args[2][0]
     note_nr = args[2].replace(args[2][0], "")
 
-    # Find's the group letter position from alphabet
+    # Finds the group letter position from the alphabet
     char_pos = alphabet.find(group_char)
 
-    # Open's and read's the groups
+    # Opens and reads the groups
     group_lines = readgroupfile()
 
     # Translates the group_char to a group name
     group = group_lines[char_pos].replace("\n", "")
 
-    # Open's and read's the notes
+    # Opens and reads the notes
     note_lines = readnotefile()
 
-    # Open the note file in writing mode
+    # Opens the note file in writing mode
     file = open(BASENOTES, "w")
 
     counter = 0
@@ -257,10 +266,9 @@ def delete():
         line_counter += 1
     file.close()
 
-
+# Edits a note's text
 def edit():
-    # todo e <group_char + note_nr> <note> <group>
-
+    # Retrieves the group char and note number
     group_char = args[2][0]
     note_nr = args[2].replace(args[2][0], "")
 
@@ -300,14 +308,16 @@ def edit():
         line_counter += 1
     file.close()
 
-
+# Makes a group
 def makegroup():
+    #Opens the groups file and appends the group to the end
     file = open(BASEGROUPS, "a")
     file.write(args[2] + "\n")
     file.close()
 
-
+# Removes a group
 def removegroup():
+    #Checks if the group is used. If so exits.
     group_exist = False
     lines = readnotefile()
     for line in lines:
@@ -320,6 +330,7 @@ def removegroup():
         print("Group " + magenta("not empty."))
         return 1
 
+    #Opens the groups file and rewrites the lines, without including the group
     with open(BASEGROUPS, "r+") as f:
         new_f = f.readlines()
         f.seek(0)
@@ -332,8 +343,9 @@ def removegroup():
 
     list()
 
+# Edits a note's group
 def editgroup():
-    #check if group exists
+    #check if group exists and if not exits.
     exists = False
     lines = readgroupfile()
     for line in lines:
@@ -345,22 +357,23 @@ def editgroup():
         print("Group does not exist.")
         sys.exit()
 
+    # Retrieves the group char and the note number
     group_char = args[2][0]
     note_nr = args[2].replace(args[2][0], "")
 
-    # Find's the group letter position from alphabet
+    # Finds the group letter position from alphabet
     char_pos = alphabet.find(group_char)
 
-    # Open's and read's the groups
+    # Opens and reads the groups
     group_lines = readgroupfile()
 
     # Translates the group_char to a group name
     group = group_lines[char_pos].replace("\n", "")
 
-    # Open's and read's the notes
+    # Opens and reads the notes
     note_lines = readnotefile()
 
-    # Open the note file in writing mode
+    # Opens the note file in writing mode
     file = open(BASENOTES, "w")
 
     counter = 0
@@ -385,30 +398,30 @@ def editgroup():
         line_counter += 1
     file.close()
 
-
+# Changes the state/color of a note
 def changestate():
-    # todo s <group_char + note_nr> <state>
-
     color = "3" #Default color
 
+    # Retrieves the group char and the note number
     group_char = args[2][0]
     note_nr = args[2].replace(args[2][0], "")
 
-    # Find's the group letter position from alphabet
+    # Finds the group letter position from alphabet
     char_pos = alphabet.find(group_char)
 
-    # Open's and read's the groups
+    # Opens and reads the groups
     group_lines = readgroupfile()
 
     # Translates the group_char to a group name
     group = group_lines[char_pos].replace("\n", "")
 
-    # Open's and read's the notes
+    # Opens and reads the notes
     note_lines = readnotefile()
 
-    # Open the note file in writing mode
+    # Opens the note file in writing mode
     file = open(BASENOTES, "w")
 
+    # Goes through the note file lines
     counter = 0
     line_counter = 0
     for line in note_lines:
@@ -416,12 +429,13 @@ def changestate():
         line_group = line_split[2].replace("\n", "")
         line_note = line_split[0]
 
-        # Check's if group is correct
+        # Checks if group is correct
         if(line_group == group):
             counter += 1
 
-            # Check's if count is correct
+            # Checks if count is correct
             if(note_nr == str(counter)):
+                # Translates the name colors into integers
                 if(args[3] == "red"):
                     color = "1"
                 elif(args[3] == "yellow"):
@@ -439,20 +453,22 @@ def changestate():
         line_counter += 1
     file.close()
 
-
+# Removes all done(green) notes
 def removedone():
-    # todo rd
-
+    # Reads the note file
     lines = readnotefile()
 
+    # Open's the notes file in writing mode
     file = open(BASENOTES, "w")
 
+    # Goes through the lines and rewrites them. Ignores the ones that have the third state.
     for line in lines:
         if(line.split(";")[1] != "3"):
             file.write(line)
 
     file.close()
 
+# Prints the help function
 def help():
     green_prompt = green("  >>")
     grey_mod = lgrey("  --")
@@ -500,6 +516,7 @@ def help():
     print(blue("  GitHub:") + yellow(" https://github.com/x3F-x3F/Todo "))
     print("    Feel free to open an issue!")
 
+# A function that builds the help arguments for each command
 def showargs(usage_array, args_array, ex_array):
     green_prompt = green("  >>")
 
@@ -524,8 +541,12 @@ def showargs(usage_array, args_array, ex_array):
     sys.exit()
 
 
-def main():
+#=============================================================================
+# Main
+#=============================================================================
 
+def main():
+    #Checks if no args were supplied
     if args_len == 0:
         help()
 
