@@ -398,10 +398,10 @@ def help():
     #print(blue("-"*54))
     print(cs.bold + magenta(":: Simplistic todo terminal application created in Python3"))
     print("")
-    print(lcyan("USAGE:") + " " + cs.bold + magenta("todo") + yellow(" <cmd> ") + "<arg1> <arg2> ...")
+    print(lcyan("USAGE:") + " " + yellow("todo") + " <cmd> " + "<arg1> <arg2> ...")
     print("")
     print(lcyan("CORE COMMANDS:"))
-    print(green_prompt + "  list:" + "        Prints all the notes")
+    print(green_prompt + "  list:" + "        Lists all the notes")
     print(green_prompt + "  insert:" + "      Inserts a note")
     print(green_prompt + "  remove:" + "      Removes a note")
     print(green_prompt + "  edit:" + "        Edits a note's text")
@@ -427,68 +427,235 @@ def help():
     print("")
     print(lcyan("LEARN MORE:"))
     print(blue("  States:"))
-    print("    1.",red("Red entry"),red("    -> Not started"))
-    print("    2.",yellow("Yellow entry"),yellow(" -> Doing"))
-    print("    3.",green("Green entry"),green("  -> Done"))
+    print("    1.",red("Red entry") + "     -> " + red("Not started"))
+    print("    2.",yellow("Yellow entry") + "  -> " + yellow("Doing"))
+    print("    3.",green("Green entry") + "   -> " + green("Done"))
     print("")
-    print(blue("  Use:") + green(" '") + cs.bold + magenta("todo") + yellow(" <cmd> ") + "-h" + green("'") + " for " + green("<args>"))
+    print(blue("  Use:") + green(" '") + yellow("todo") + " <cmd> " + "-h" + green("'") + " for " + cs.bold + magenta("<args>"))
     print("")
     print(blue("  GitHub:") + yellow(" https://github.com/x3F-x3F/Todo "))
     print("    Feel free to open an issue!")
 
+def showargs(usage_array, args_array, ex_array):
+    green_prompt = green("  >>")
+
+    counter = 0
+    while counter != len(usage_array):
+        print(lcyan("USAGE:") +  usage_array[counter])
+        counter+=1
+    print("")
+
+    print(lcyan("ARGUMENTS:"))
+    counter = 0
+    while counter != len(args_array):
+        print(green_prompt + args_array[counter])
+        counter+=1
+    print("")
+
+    print(lcyan("EXAMPLES:"))
+    counter = 0
+    while counter != len(ex_array):
+        print(green_prompt + ex_array[counter])
+        counter+=1
+    sys.exit()
+
+
 def main():
 
     if args_len == 0:
-        list()
+        help()
 
     elif args[1] == "setup":
-        # todo setup
-        setup()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                print("No help for setup defined.")
+            else:
+                setup()
+        else:
+            setup()
     
     elif args[1] == "upgrade":
-        # todo setup
-        upgrade()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                print("No help for upgrade defined.")
+            else:
+                upgrade()
+        else:
+            upgrade()
 
     elif args[1] == "i" or args[1] == "insert":
-        # todo i <note> <group>
-        insert()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo insert <arg1> <arg2>", 
+                         " todo i <arg1> <arg2>"
+                        ]
+                arguments = ["  <arg1>    The group character(a-z)",
+                             "  <arg2>    The note('Homework!')"
+                            ]
+                examples = ["  todo i a \"Help me!\"", 
+                            "  todo i c Work"
+                           ]
+
+                print(magenta(":: Inserts a note"))
+                print("")
+                showargs(usage, arguments, examples)
+            insert()
+            list()
+        else:
+            insert()
+            list()
 
     elif args[1] == "l" or args[1] == "list":
-        # todo l
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo list",
+                         " todo l",
+                ]
+                arguments = ["  No arguments"]
+                examples = ["  todo list"]
+
+                print(magenta(":: Lists all the notes"))
+                print("")
+                showargs(usage, arguments, examples)
+            # todo l
+            list()
+        else:
+            list()
 
     elif args[1] == "d" or args[1] == "delete" or args[1] == "r" or args[1] == "remove":
-        # todo d <group> <note_nr>
-        delete()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo remove <arg1>",
+                         " todo r <arg1>",
+                         " todo delete <arg1>",
+                         " todo d <arg1>"
+                ]
+                arguments = ["  <arg1>    The group char and note id combined(b3, a11)"]
+                examples = ["  todo remove a7",
+                            "  todo d c5"
+                ]
+
+                print(magenta(":: Removes a note"))
+                print("")
+                showargs(usage, arguments, examples)
+            # todo d <group> <note_nr>
+            delete()
+            list()
+        else:
+            delete()
+            list()
 
     elif args[1] == "e" or args[1] == "edit":
-        edit()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo edit <arg1> <arg2>",
+                         " todo e <arg1> <arg2>"
+                ]
+                arguments = ["  <arg1>    The group char and note id combined(b3, a7)",
+                             "  <arg2>    The new note"
+                ]
+                examples = ["  todo edit a3 Homework",
+                            "  todo e b5 Chicken"]
+
+                print(magenta(":: Edits a note's text"))
+                print("")
+                showargs(usage, arguments, examples)
+            edit()
+            list()
+        else:
+            edit()
+            list()
 
     elif args[1] == "mg" or args[1] == "makegroup":
-        makegroup()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo makegroup <arg1>",
+                         " todo mg <arg1>"
+                ]
+                arguments = ["  <arg1>    The group name"]
+                examples = ["  todo makegroup School"]
+
+                print(magenta(":: Makes a group"))
+                print("")
+                showargs(usage, arguments, examples)
+            makegroup()
+            list()
+        else:
+            makegroup()
+            list()
 
     elif args[1] == "rg" or args[1] == "removegroup":
-        removegroup()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo removegroup <arg1>",
+                         " todo rg <arg1>"
+                ]
+                arguments = ["  <arg1>    The group name(Not the group char!)"]
+                examples = ["  todo removegroup School"]
+
+                print(magenta(":: Removes a group"))
+                print("")
+                showargs(usage, arguments, examples)
+            removegroup()
+        else:
+            removegroup()
 
     elif args[1] == "s" or args[1] == "state":
-        changestate()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo state <arg1> <arg2>",
+                         " todo s <arg1> <arg2>"
+                ]
+                arguments = ["  <arg1>    The group char and note id combined(b2, a6)",
+                             "  <arg2>    The state(red(1), yellow(2), green(3)"
+                ]
+                examples = ["  todo s b2 green",
+                            "  todo state a5 2"
+                ]
+
+                print(magenta(":: Changes the state of a note"))
+                print("")
+                showargs(usage, arguments, examples)
+            changestate()
+            list()
+        else:
+            changestate()
+            list()
 
     elif args[1] == "rd" or args[1] == "removedone":
-        removedone()
-        list()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo removedone", " todo rd"]
+                arguments = ["  No arguments"]
+                examples = ["  todo rd"]
+
+                print(magenta(":: Removes all done notes"))
+                print("")
+                showargs(usage, arguments, examples)
+            removedone()
+            list()
+        else:
+            removedone()
+            list()
 
     elif args[1] == "quit":
         # todo setup
         sys.exit()
 
     elif args[1] == "-h" or args[1] == "--help" or args[1] == "h" or args[1] == "help":
-        # show help
-        help()
+        if(args_len >= 2):
+            if(args[2] == "-h" or args[2] == "--help"):
+                usage = [" todo help", " todo h", " todo -h", " todo --help"]
+                arguments = ["  No arguments"]
+                examples = ["  todo -h"]
+
+                print(magenta(":: Displays the help message"))
+                print("")
+                showargs(usage, arguments, examples)
+            # show help
+            help()
+        else:
+            help()
 
     else:
         print("Command not found")
