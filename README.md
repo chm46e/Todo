@@ -26,7 +26,7 @@ Work offline in the terminal, no logging required.
 #### Installation
 With `git`:
 ```shell
-$ git clone https://github.com/x3F-x3F/Todo
+$ git clone https://github.com/chm46e/Todo
 ```
 To set everything up, run:
 ```shell
